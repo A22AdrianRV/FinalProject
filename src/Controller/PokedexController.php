@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 use App\Entity\Pokedex;
+use App\Repository\PokedexRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -87,9 +88,13 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
     }
 
     #[Route('/pokedex')]
-    public function pokedex():Response{
+    public function pokedex(PokedexRepository $pokedex):Response{
 
-        return $this->render('pokemon/pokedex.html.twig',[]);
+        $poke = $pokedex->findByName("bulbasaur");
+        dd($poke);
+        return $this->render('pokemon/pokedex.html.twig',[
+            "pokemon" => $poke,
+        ]);
     }
 
     #[Route('/teams')]

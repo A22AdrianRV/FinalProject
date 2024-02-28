@@ -21,20 +21,20 @@ class PokedexRepository extends ServiceEntityRepository
         parent::__construct($registry, Pokedex::class);
     }
 
-    //    /**
-    //     * @return Pokedex[] Returns an array of Pokedex objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+       /**
+        * @return Pokedex[] Returns an array of Pokedex objects
+        */
+       public function findByName($value): array
+       {
+           return $this->createQueryBuilder('p')
+               ->andWhere('p.name = :val')
+               ->setParameter('val', $value)
+               ->orderBy('p.id', 'ASC')
+               ->setMaxResults(10)
+               ->getQuery()
+               ->getResult()
+           ;
+       }
 
     //    public function findOneBySomeField($value): ?Pokedex
     //    {
