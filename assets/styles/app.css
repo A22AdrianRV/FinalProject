@@ -1,0 +1,35 @@
+body {
+    background-color: lightgray;
+    margin: 0px;
+}
+
+nav{
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    top: 0px;
+
+}
+
+div:nth-of-type(1){
+    border-right: 1px solid black;
+    height: 80vh;
+    width: 49vw;
+    display: inline-block;
+    float: left;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    width: 10vw;
+    margin: 0 auto;
+}
+div:nth-of-type(2){
+    height: 500px;
+    width: 50vw;
+    display: inline-block;
+    float: right;
+}

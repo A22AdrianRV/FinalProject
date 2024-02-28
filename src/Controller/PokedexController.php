@@ -13,7 +13,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
         #[Route('/pokemon/add')]
         public function InsertPokemon(HttpClientInterface $http,EntityManagerInterface $entityManagerInterface):Response{
 
-            $response = $http->request('GET',"https://pokeapi.co/api/v2/pokemon?limit=1025&offset=0",[
+            $response = $http->request('GET',"https://pokeapi.co/api/v2/pokemon?limit=1025&offset=35",[
                 'headers' => [
                     'Accept' => 'applications/json',
                 ],
@@ -42,24 +42,28 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
                 $poke->setAbilities([]);
                 $arr = [];
                 foreach($pokemonInfo->moves as $movement){
+                    $details = $http->request('GET',$movement->move->url);
+                    $moveInfo = json_decode($details->getContent());
                     $moveJSON = [
                         $movement->move->name => [
                             "learn_method" => $movement->version_group_details[0]->move_learn_method->name,
                             "level_learned_at" => $movement->version_group_details[0]->level_learned_at,
+                            "type" => $moveInfo->damage_class->name,
+                            "power" => $moveInfo->power
                         ]];
 
                     array_push($arr,$moveJSON);
                     
                 }
                 $poke->setMoves($arr);
-
                 $poke->setImages([
                     "front" =>$pokemonInfo->sprites->front_default,
                     "back"=>$pokemonInfo->sprites->back_default,
                     "front_shiny"=>$pokemonInfo->sprites->front_shiny,
                     "back_shiny"=>$pokemonInfo->sprites->back_shiny,
+                    "big_front" => $pokemonInfo->sprites->other->home->front_default,
+
                 ]);
-            
                 $poke->setStats([
                     "HP" => $pokemonInfo->stats[0]->base_stat,
                     "Attack" =>$pokemonInfo->stats[1]->base_stat,
@@ -81,7 +85,18 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
         return new Response(sprintf("Todos los pokes añadidos"));
 
     }
-    
+
+    #[Route('/pokedex')]
+    public function pokedex():Response{
+
+        return $this->render('pokemon/pokedex.html.twig',[]);
+    }
+
+    #[Route('/teams')]
+    public function teams():Response{
+
+        return $this->render('pokemon/teams.html.twig',[]);
+    }
 
 }
 
