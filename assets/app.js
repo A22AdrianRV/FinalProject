@@ -7,3 +7,19 @@
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
+
+import Vue from 'vue';
+				
+			new Vue({
+				el: '#app',
+                data(){
+                    return{
+                        togglePokemon : false,
+                    }
+                },methods:{
+                    toggle(){
+                        this.togglePokemon = !this.togglePokemon;
+                        console.log();
+                    }
+                }
+			});

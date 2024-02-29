@@ -13,11 +13,9 @@ nav{
 
 }
 
-div:nth-of-type(1){
-    border-right: 1px solid black;
+.search{
     height: 80vh;
-    width: 49vw;
-    display: inline-block;
+    width: 30vw;
     float: left;
 }
 
@@ -27,9 +25,19 @@ form{
     width: 10vw;
     margin: 0 auto;
 }
-div:nth-of-type(2){
+body > div:nth-of-type(2){
     height: 500px;
-    width: 50vw;
-    display: inline-block;
+    width: 65vw;
     float: right;
+    border-left: 1px solid black;
+}
+
+.card{
+    text-align: center;
+    display: inline-block;
+    width: 10rem;
+    /* height: 12rem; */
+    padding: 10px;
+    background-image: linear-gradient(135deg,green,purple);
+    margin: 10px;
 }
