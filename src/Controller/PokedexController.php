@@ -90,10 +90,10 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
     #[Route('/')]
     public function pokedex(PokedexRepository $pokedex):Response{
 
-        $poke1 = $pokedex->findByName("bulbasaur");
-        $poke2 = $pokedex->findByName("ivysaur");
+        $poke1 = $pokedex->findByName("pikachu");
+        $poke2 = $pokedex->findByName("charmander");
         $poke3 = $pokedex->findByName("Charizard");
-        $pokemon = [$poke1,$poke2,$poke3];
+        $pokemon = [$poke1,$poke2,$poke3,$poke1,$poke2,$poke3];
         return $this->render('pokemon/pokedex.html.twig',[
             "pokemons" => $pokemon,
             "url" => "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/",
