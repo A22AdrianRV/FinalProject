@@ -34,8 +34,6 @@ class Pokedex
     #[ORM\Column]
     private array $evolution_chain = [];
 
-    #[ORM\Column]
-    private array $images = [];
 
     public function getId(): ?int
     {
@@ -115,15 +113,4 @@ class Pokedex
         return $this;
     }
 
-    public function getImages(): array
-    {
-        return $this->images;
-    }
-
-    public function setImages(array $images): static
-    {
-        $this->images = $images;
-
-        return $this;
-    }
 }

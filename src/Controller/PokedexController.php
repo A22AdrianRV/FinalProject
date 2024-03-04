@@ -13,8 +13,10 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
         #[Route('/pokemon/add')]
         public function InsertPokemon(HttpClientInterface $http,EntityManagerInterface $entityManagerInterface):Response{
+            
 
-            $response = $http->request('GET',"https://pokeapi.co/api/v2/pokemon?limit=1025&offset=35",[
+            set_time_limit(600);
+            $response = $http->request('GET',"https://pokeapi.co/api/v2/pokemon?limit=151&offset=0",[
                 'headers' => [
                     'Accept' => 'applications/json',
                 ],
@@ -40,7 +42,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
                     ];
                     array_push($AbilityArr,$AbilityJSON);
                 }
-                $poke->setAbilities([]);
+                $poke->setAbilities($AbilityArr);
                 $arr = [];
                 foreach($pokemonInfo->moves as $movement){
                     $details = $http->request('GET',$movement->move->url);
@@ -57,14 +59,6 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
                     
                 }
                 $poke->setMoves($arr);
-                $poke->setImages([
-                    "front" =>$pokemonInfo->sprites->front_default,
-                    "back"=>$pokemonInfo->sprites->back_default,
-                    "front_shiny"=>$pokemonInfo->sprites->front_shiny,
-                    "back_shiny"=>$pokemonInfo->sprites->back_shiny,
-                    "big_front" => $pokemonInfo->sprites->other->home->front_default,
-
-                ]);
                 $poke->setStats([
                     "HP" => $pokemonInfo->stats[0]->base_stat,
                     "Attack" =>$pokemonInfo->stats[1]->base_stat,
@@ -90,10 +84,12 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
     #[Route('/')]
     public function pokedex(PokedexRepository $pokedex):Response{
 
-        $poke1 = $pokedex->findByName("pikachu");
-        $poke2 = $pokedex->findByName("charmander");
-        $poke3 = $pokedex->findByName("Charizard");
-        $pokemon = [$poke1,$poke2,$poke3,$poke1,$poke2,$poke3];
+        $pokemon = [];
+        for($x = 0;$x<10;$x++){
+            $poke = $pokedex->findById($x);
+            array_push($pokemon,$poke);
+        }
+        dd($pokemon);
         return $this->render('pokemon/pokedex.html.twig',[
             "pokemons" => $pokemon,
             "url" => "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/",
