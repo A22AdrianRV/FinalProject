@@ -17,20 +17,16 @@
 		</form>
 	</div>
 	<div id="app">
+	
 		{% for pokemon in pokemons %}
-			<div class="card {{pokemon[0].types[0]}} {{pokemon[0].types[1]}}" v-show="!togglePokemon">
+			<div class="card {{pokemon[0].types[0]}} {{pokemon[0].types[1]}}">
 				<div class="card-body">
 					<h3 class="card-title">{{ pokemon[0].name|capitalize }}</h3>
 
 				</div>
-				<img @click="toggle({{pokemon[0].id}},{{loop.index}})" card-img-top src="{{url}}/other/showdown/{{pokemon[0].id}}.gif">
+				<img @click="getInfo({{pokemon[0].id}})" card-img-top src="{{url}}/other/showdown/{{pokemon[0].id}}.gif">
 
 			</div>
 		{% endfor %}
-		<div v-show="togglePokemon">
-			<img
-			:src="pokemonUrl" :class="index">
-		{# <p>{{pokemons[indice][0].name}}</p> #}
-		</div>
-	</p>
-</div>{% endblock %}
+	</div>
+{% endblock %}
