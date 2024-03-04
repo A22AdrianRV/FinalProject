@@ -11,7 +11,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
     class PokedexController extends AbstractController{
 
 
-        #[Route('/pokemon/add')]
+        // #[Route('/pokemon/add')]
         public function InsertPokemon(HttpClientInterface $http,EntityManagerInterface $entityManagerInterface):Response{
             
 
@@ -81,20 +81,21 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
     }
 
-    #[Route('/')]
+    #[Route('/{slug}')]
     public function pokedex(PokedexRepository $pokedex):Response{
 
         $pokemon = [];
-        for($x = 0;$x<10;$x++){
+        for($x = 1;$x<=50;$x++){
             $poke = $pokedex->findById($x);
             array_push($pokemon,$poke);
         }
-        dd($pokemon);
         return $this->render('pokemon/pokedex.html.twig',[
             "pokemons" => $pokemon,
             "url" => "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/",
         ]);
     }
+
+    
 
     #[Route('/teams')]
     public function teams():Response{

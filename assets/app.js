@@ -15,11 +15,18 @@ import Vue from 'vue';
                 data(){
                     return{
                         togglePokemon : false,
+                        pokemonUrl : "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/",
+                        pokemonId : 0,
+                        index: 0,
                     }
                 },methods:{
-                    toggle(){
+                    toggle(id,index){
                         this.togglePokemon = !this.togglePokemon;
-                        console.log();
+                        this.pokemonUrl += id;
+                        this.pokemonUrl += ".png";
+                        this.pokemonId = id;
+                        this.index = index;
+                        window.location.replace(`/${index}`);
                     }
-                }
+                },delimiters:['${','}$'],
 			});

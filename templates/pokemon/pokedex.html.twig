@@ -3,6 +3,7 @@
 	<link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
 {% endblock %}
 {% block body %}
+	{% set pokemonIndex = 0 %}
 	<div class="search">
 		<form>
 			<label for="name">Name:</label>
@@ -22,12 +23,14 @@
 					<h3 class="card-title">{{ pokemon[0].name|capitalize }}</h3>
 
 				</div>
-				<img @click="toggle()" card-img-top src="{{url}}/other/showdown/{{pokemon[0].id}}.gif">
+				<img @click="toggle({{pokemon[0].id}},{{loop.index}})" card-img-top src="{{url}}/other/showdown/{{pokemon[0].id}}.gif">
 
 			</div>
 		{% endfor %}
 		<div v-show="togglePokemon">
-			<img src="{{url}}/other/official-artwork/{{pokemons[0][0].id}}.png">
+			<img
+			:src="pokemonUrl" :class="index">
+		{# <p>{{pokemons[indice][0].name}}</p> #}
 		</div>
-	</div>
-{% endblock %}
+	</p>
+</div>{% endblock %}
