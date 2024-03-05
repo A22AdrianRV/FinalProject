@@ -36,3 +36,25 @@ $colors : (
     
 }
 
+.info{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+
+    & img {
+        width: 300px;
+        border: 2px solid black;  
+    }
+
+    & div{
+        display: flex;
+        flex-direction: row;
+        gap: 10px;  
+        
+        & p{
+            padding: 5px;
+            border-radius: 5px;
+        }
+    }
+  }

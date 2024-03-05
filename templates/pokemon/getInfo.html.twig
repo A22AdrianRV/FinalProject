@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
+{% endblock %}
+{% block body %}
+
+	<div class="search">
+		<form>
+			<label for="name">Name:</label>
+			<input type="text">
+			<label for="type">Type 1:
+			</label>
+			<input type="text">
+			<label for="type2">Type 2:
+			</label>
+			<input type="text2">
+		</form>
+	</div>
+	<div class="info">
+		<h3>{{pokemon[0].name}}</h3>
+		<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{{pokemon[0].id}}.png">
+		<div>
+			{% for type in pokemon[0].types %}
+				<p class="{{type}}">{{type}}</p>
+			{% endfor %}
+		</div>
+		<div>
+			{% set currentLevel = pokemon[0].evolutionChain %}
+			<p>{{currentLevel.species.name}}</p>
+			{% for i in 0..5 %}
+				{% if currentLevel.evolves_to is not empty %}
+					{% set currentLevel = currentLevel.evolves_to[0] %}
+					<p>{{Prueba(currentLevel.species.name)}}</p>
+				{% endif %}
+			{% endfor %}
+
+
+		</div>
+	{% endblock %}

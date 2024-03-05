@@ -1,7 +1,6 @@
 body {
   background-color: lightgray;
   margin: 0px;
-  /* overflow: hidden; */
 }
 
 nav {
@@ -27,7 +26,7 @@ form {
   width: 10vw;
   margin: 0 auto;
 }
-body > div:nth-of-type(2) {
+#app {
   height: 30vh;
   width: 65vw;
   min-height: 30vh;
@@ -43,7 +42,6 @@ body > div:nth-of-type(2) {
   width: 10rem;
   height: 12rem;
   padding: 10px;
-  /* background-image: linear-gradient(135deg,green,purple); */
   margin: 10px;
   border-radius: 10px;
 }
@@ -54,3 +52,23 @@ body > div:nth-of-type(2) {
   min-height: 6rem;
   max-width: 7, 365rem;
 }
+
+/* .info{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+}
+
+.info img{
+  width: 300px;
+  border: 2px solid black;
+}
+
+.info > div{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+} */
+
+

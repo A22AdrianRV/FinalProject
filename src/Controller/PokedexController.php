@@ -96,9 +96,13 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
         ]);
     }
 
-    #[Route('/getInfo/{slug}')]
-    public function getInfo(){
-        
+    #[Route('/{slug}')]
+    public function getInfo(PokedexRepository $pokedex,$slug):Response{
+        $pokemon = $pokedex->findById($slug);
+        // dd($pokemon);
+        return $this->render('pokemon/getInfo.html.twig',[
+            "pokemon" => $pokemon,
+        ]);
     }
     
 

@@ -17,9 +17,9 @@
 		</form>
 	</div>
 	<div id="app">
-	
+
 		{% for pokemon in pokemons %}
-			<div class="card {{pokemon[0].types[0]}} {{pokemon[0].types[1]}}">
+			<div class="card {{pokemon[0].types[0]}} {{pokemon[0].types[1]}}" lazy>
 				<div class="card-body">
 					<h3 class="card-title">{{ pokemon[0].name|capitalize }}</h3>
 
