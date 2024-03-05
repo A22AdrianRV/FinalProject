@@ -1,60 +1,130 @@
-
-$colors : (
-    normal:rgb(168, 168, 120),
-    fire:rgb(240, 128, 48),
-    water:rgb(104, 144, 240),
-    grass:rgb(120, 200, 80),
-    electric:rgb(248, 208, 48),
-    ice:rgb(152, 216, 216),
-    fighting:rgb(192, 48, 40),
-    poison:rgb(160, 64, 160),
-    ground:rgb(224, 192, 104),
-    flying:rgb(168, 144, 240),
-    psychic:rgb(248, 88, 136),
-    bug:rgb(168, 184, 32),
-    rock:rgb(184, 160, 56),
-    ghost:rgb(112, 88, 152),
-    dragon:rgb(112, 56, 248),
-    dark:rgb(112, 88, 72),
-    steel:rgb(184, 184, 208),
-    fairy:rgb(238, 153, 172),
+$colors: (
+  normal: rgb(168, 168, 120),
+  fire: rgb(240, 128, 48),
+  water: rgb(104, 144, 240),
+  grass: rgb(120, 200, 80),
+  electric: rgb(248, 208, 48),
+  ice: rgb(152, 216, 216),
+  fighting: rgb(192, 48, 40),
+  poison: rgb(160, 64, 160),
+  ground: rgb(224, 192, 104),
+  flying: rgb(168, 144, 240),
+  psychic: rgb(248, 88, 136),
+  bug: rgb(168, 184, 32),
+  rock: rgb(184, 160, 56),
+  ghost: rgb(112, 88, 152),
+  dragon: rgb(112, 56, 248),
+  dark: rgb(112, 88, 72),
+  steel: rgb(184, 184, 208),
+  fairy: rgb(238, 153, 172),
 );
 
-@each $name,$color in $colors{
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
 
-    @each $name2,$color2 in $colors{
-        @if $name!=$name2{
-        .#{$name}.#{$name2}{
-            background-image: linear-gradient(135deg,$color,$color2);
-        }
-    }
-    }
-
-    .#{$name}{
-        background-color: $color;
-    }
-    
-}
-
-.info{
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    align-items: center;
-
-    & img {
-        width: 300px;
-        border: 2px solid black;  
-    }
-
-    & div{
-        display: flex;
-        flex-direction: row;
-        gap: 10px;  
-        
-        & p{
-            padding: 5px;
-            border-radius: 5px;
-        }
+@each $name, $color in $colors {
+  @each $name2, $color2 in $colors {
+    @if $name!=$name2 {
+      .#{$name}.#{$name2} {
+        background-image: linear-gradient(135deg, $color, $color2);
+      }
     }
   }
+
+  .#{$name} {
+    background-color: $color;
+  }
+}
+
+nav {
+  background-color: black;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  top: 0px;
+  height: 5vh;
+
+  & a {
+    text-decoration: none;
+    color: white;
+  }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+
+  & img {
+    width: 300px;
+    border: 2px solid black;
+  }
+
+  & .evo {
+    & img {
+      width: 200px;
+      border: 0px solid black;
+    }
+  }
+
+  & div {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+
+    & p {
+      padding: 5px;
+      border-radius: 5px;
+    }
+  }
+  & .stats {
+    background-color: white;
+    border-radius: 10px;
+    padding: 50px;
+    width: 60%;
+    display: grid;
+    text-align: center;
+    grid-template-areas:
+      "HP SpAttack"
+      "Attack SpDefense"
+      "Defense Speed";
+
+    & div {
+      height: 30px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-end;
+      & div {
+        width: 70%;
+        justify-content: flex-start;
+        & div {
+          justify-content: flex-start;
+          background-color: red;
+        }
+      }
+    }
+    & span {
+      width: 30%;
+      padding: 0px;
+      margin: 0px;
+    }
+  }
+
+  & .evo {
+    & a {
+      border: 2px solid white;
+      border-radius: 10px;
+      text-decoration: none;
+      & p {
+        margin: 0px;
+        padding: 0px;
+        text-decoration: none;
+        color: black;
+        font-size: 1.4em;
+      }
+    }
+    padding: 10px;
+  }
+}

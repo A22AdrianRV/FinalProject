@@ -10,6 +10,7 @@ import "./styles/app.css";
 
 import Vue from "vue";
 
+/*
 new Vue({
   el: "#app",
   data() {
@@ -31,4 +32,4 @@ new Vue({
   delimiters: ["${", "}$"],
 });
 
-
+*/

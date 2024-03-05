@@ -1,23 +1,16 @@
 body {
   background-color: lightgray;
   margin: 0px;
-}
-
-nav {
-  background-color: black;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  top: 0px;
-  height: 10vh;
+  height: 93.5vh;
 }
 
 .search {
-  height: 90vh;
+  min-height: 100%;
   width: 30vw;
   float: left;
   border-right: 1px solid black;
+  display: flex;
+  align-items: center;
 }
 
 form {
@@ -52,23 +45,3 @@ form {
   min-height: 6rem;
   max-width: 7, 365rem;
 }
-
-/* .info{
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  align-items: center;
-}
-
-.info img{
-  width: 300px;
-  border: 2px solid black;
-}
-
-.info > div{
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-} */
-
-

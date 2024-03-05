@@ -28,14 +28,21 @@ class PokedexRepository extends ServiceEntityRepository
        {
            return $this->createQueryBuilder('p')
                ->andWhere('p.name = :val')
-               ->setParameter('val', $value)
+               ->setParameter('val', '%'.$value.'%')
                ->orderBy('p.id', 'ASC')
                ->setMaxResults(10)
                ->getQuery()
-               ->getResult()
-           ;
+               ->getResult();
        }
 
+       public function getPokemon($name):array{
+            return $this->createQueryBuilder('p')
+            ->andWhere('p.name LIKE :val')
+            ->setParameter("val",'%'.$name.'%')
+            ->setMaxResults(25)
+            ->getQuery()
+            ->getResult();
+       }
     //    public function findOneBySomeField($value): ?Pokedex
     //    {
     //        return $this->createQueryBuilder('p')

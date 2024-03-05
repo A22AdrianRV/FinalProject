@@ -2,8 +2,12 @@
 namespace App\Controller;
 use App\Entity\Pokedex;
 use App\Repository\PokedexRepository;
+use App\Twig\getPokemon;
+use Doctrine\DBAL\Types\TextType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -11,12 +15,12 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
     class PokedexController extends AbstractController{
 
 
-        // #[Route('/pokemon/add')]
+        #[Route('/pokemon/add')]
         public function InsertPokemon(HttpClientInterface $http,EntityManagerInterface $entityManagerInterface):Response{
             
 
-            set_time_limit(600);
-            $response = $http->request('GET',"https://pokeapi.co/api/v2/pokemon?limit=151&offset=0",[
+            set_time_limit(6000);
+            $response = $http->request('GET',"https://pokeapi.co/api/v2/pokemon?limit=874&offset=151",[
                 'headers' => [
                     'Accept' => 'applications/json',
                 ],
@@ -28,12 +32,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
                 $pokemonInfo = json_decode($resp->getContent());
                 $poke = new Pokedex();
                 $poke->setName($pokemonInfo->name);
-                // $poke->setType1($pokemonInfo->types[0]->type->name);
-                // $poke->setType2(count($pokemonInfo->types) > 1 ? $pokemonInfo->types[1]->type->name : null);
                 $poke->setTypes([$pokemonInfo->types[0]->type->name,count($pokemonInfo->types) > 1 ? $pokemonInfo->types[1]->type->name : null]);
-                // $poke->setAbility1($pokemonInfo->abilities[0]->ability->name);
-                // $poke->setAbility2( (count($pokemonInfo->abilities) == 1) ? null  :($pokemonInfo->abilities[1]->is_hidden ? null: $pokemonInfo->abilities[1]->ability->name));
-                // $poke->setHiddenAbility((count($pokemonInfo->abilities) == 1) ? null:($pokemonInfo->abilities[1]->is_hidden ? $pokemonInfo->abilities[1]->ability->name : (count($pokemonInfo->abilities) > 2 ? $pokemonInfo->abilities[2]->ability->name:null)));
                 $AbilityArr = [];
                 foreach($pokemonInfo->abilities as $ability){
                     $AbilityJSON = [
@@ -82,24 +81,36 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
     }
 
     #[Route('/')]
-    public function pokedex(PokedexRepository $pokedex,$slug = null):Response{
+    public function pokedex(PokedexRepository $pokedexRepository,Request $request,$slug = null):Response{
 
         $pokemon = [];
-        for($x = 1;$x<=50;$x++){
-            $poke = $pokedex->findById($x);
+        for($x = 1;$x<=20;$x++){
+            $poke = $pokedexRepository->findById(rand(1,1025));
             array_push($pokemon,$poke);
         }
+        $pokedex = new Pokedex();
+        $form = $this->createFormBuilder($pokedex)
+        ->add("name")
+        ->add("save",SubmitType::class,["label"=>"Search"])
+        ->getForm();
 
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $pokemon = [];
+            array_push($pokemon,$pokedexRepository->getPokemon($form->getData()->getName()));
+        }
         return $this->render('pokemon/pokedex.html.twig',[
             "pokemons" => $pokemon,
             "url" => "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/",
+            "form" => $form,
         ]);
     }
 
     #[Route('/{slug}')]
-    public function getInfo(PokedexRepository $pokedex,$slug):Response{
-        $pokemon = $pokedex->findById($slug);
-        // dd($pokemon);
+    public function getInfo(PokedexRepository $pokedexRepository,Request $request,$slug):Response{
+        $pokemon = $pokedexRepository->findById($slug);
+
         return $this->render('pokemon/getInfo.html.twig',[
             "pokemon" => $pokemon,
         ]);
@@ -111,6 +122,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
         return $this->render('pokemon/teams.html.twig',[]);
     }
+
 
 }
 

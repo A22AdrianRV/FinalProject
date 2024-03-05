@@ -1,17 +1,20 @@
+<?php
 namespace App\Twig;
 
+use App\Repository\PokedexRepository;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use Twig\TwigFilter;
 
 class getPokemon extends AbstractExtension{
-    public function getFunctions(): array
+    public function getFilters(): array
     {
         return [
-            new TwigFunction('Prueba', [$this, 'getId']),
+            new TwigFilter('getId', [$this, 'getId']),
         ];
     }
 
-    public function getId(string $name):int{
-        return 4;
+    public function getId(string $url):string{
+        $id = explode("/",$url)[count(explode("/",$url))-2];
+        return $id;
     }
 }

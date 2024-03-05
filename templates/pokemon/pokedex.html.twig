@@ -5,16 +5,7 @@
 {% block body %}
 	{% set pokemonIndex = 0 %}
 	<div class="search">
-		<form>
-			<label for="name">Name:</label>
-			<input type="text">
-			<label for="type">Type 1:
-			</label>
-			<input type="text">
-			<label for="type2">Type 2:
-			</label>
-			<input type="text2">
-		</form>
+		{{form(form)}}
 	</div>
 	<div id="app">
 
@@ -24,7 +15,7 @@
 					<h3 class="card-title">{{ pokemon[0].name|capitalize }}</h3>
 
 				</div>
-				<img @click="getInfo({{pokemon[0].id}})" card-img-top src="{{url}}/other/showdown/{{pokemon[0].id}}.gif">
+				<a href="/{{pokemon[0].id}}"><img card-img-top src="{{url}}/other/showdown/{{pokemon[0].id}}.gif"></a>
 
 			</div>
 		{% endfor %}

@@ -1,1 +1,1 @@
-Sass-bundle
+Sass-bundle symfony/form webpack encore
