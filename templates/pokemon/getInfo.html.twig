@@ -6,39 +6,38 @@
 
 	<div class="search">
 		{{form(form)}}
-	</div>
-	<div class="info">
-		<h2>{{pokemon[0].name|capitalize}}</h2>
-		<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{{pokemon[0].id}}.png">
-		<div>
-			{% for type in pokemon[0].types %}
-				<p class="{{type}}" style="font-size:2em">{{type}}</p>
-			{% endfor %}
 		</div>
-		<div class="evo">
-			{% set arrow %}
-				<div style="align-self:center">
-						<svg width="100" height="40" xmlns="http://www.w3.org/2000/svg">
-							<path d="M0 20 L 100 20 M70 40 L 100 20 L70 0 " style="stroke:black;stroke-width:3;">
-						</svg>
-				</div>
-			{% endset %}
-			{% set currentLevel = pokemon[0].evolutionChain %}
+		<div class="info">
+			<h2>{{pokemon[0].name|capitalize}}</h2>
+			<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{{pokemon[0].id}}.png">
 			<div>
-				<a href="/{{currentLevel.species.url|getId}}">
-					<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{currentLevel.species.url|getId}}.png">
-					</img>
-					<p>{{currentLevel.species.name|capitalize}}</p>
-				</a>
+				{% for type in pokemon[0].types %}
+					<p class="{{type}}" style="font-size:2em">{{type}}</p>
+				{% endfor %}
 			</div>
-			{% if currentLevel.evolves_to is not empty %}
-				{{arrow}}
-			{% endif %}
-			{% for i in 0..5 %}
+			<div class="evo">
+				{% set arrow %}
+				<div style="align-self:center">
+					<svg width="100" height="40" xmlns="http://www.w3.org/2000/svg">
+						<path d="M0 20 L 100 20 M70 40 L 100 20 L70 0 " style="stroke:black;stroke-width:3;"></svg>
+					</div>
+					{% endset %}
+					{% set currentLevel = pokemon[0].evolutionChain %}
+					<div>
+						<a href="/{{currentLevel.species.url|getId}}" style="{{currentLevel.species.name == pokemon[0].name ? "border:2px solid black" : ""}}">
+							<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{currentLevel.species.url|getId}}.png">
+						</img>
+						<p>{{currentLevel.species.name|capitalize}}</p>
+					</a>
+				</div>
 				{% if currentLevel.evolves_to is not empty %}
-					{% set currentLevel = currentLevel.evolves_to[0] %}
-					<a href="/{{currentLevel.species.url|getId}}">
-						<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{currentLevel.species.url|getId}}.png"></img>
+					{{arrow}}
+				{% endif %}
+				{% for i in 0..5 %}
+					{% if currentLevel.evolves_to is not empty %}
+						{% set currentLevel = currentLevel.evolves_to[0] %}
+						<a href="/{{currentLevel.species.url|getId}}" style="{{currentLevel.species.name == pokemon[0].name ? "border:2px solid black" : ""}}">
+							<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{currentLevel.species.url|getId}}.png"></img>
 						<p>{{currentLevel.species.name|capitalize}}</p>
 					</a>
 					{% if currentLevel.evolves_to is not empty %}
@@ -48,49 +47,59 @@
 			{% endfor %}
 		</div>
 		<div class="stats">
-		{% for key,value in pokemon[0].stats %}
-			{% if key == "HP" %}
-				<div style="grid-area:HP">
-					<span>{{key}}</span>
-					<div><div style="width:{{(value>=180?100: value*100/180)}}%;background-color:{{ (value >= 100 ? 'green' : (value>=50 ? 'yellow' : 'red')) }}">{{value}}</div></div>
-				</div>
-			{% elseif key == "Attack" %}
-				<div style="grid-area:Attack">
-					<span>{{key}}</span>
-					<div><div style="width:{{(value>=180?100: value*100/180)}}%;background-color:{{ (value >= 100 ? 'green' : (value>=50 ? 'yellow' : 'red')) }}">{{value}}</div></div>
-				</div>
-			{% elseif key == "Defense" %}
-				<div style="grid-area:Defense">
-					<span>{{key}}</span>
-					<div><div style="width:{{(value>=180?100: value*100/180)}}%;background-color:{{ (value >= 100 ? 'green' : (value>=50 ? 'yellow' : 'red')) }}">{{value}}</div></div>
-				</div>
-			{% elseif key == "Special Attack" %}
-				<div style="grid-area:SpAttack">
-					<span>{{key}}</span>
-					<div><div style="width:{{(value>=180?100: value*100/180)}}%;background-color:{{ (value >= 100 ? 'green' : (value>=50 ? 'yellow' : 'red')) }}">{{value}}</div></div>
-				</div>
-			{% elseif key == "Special Defense" %}
-				<div style="grid-area:SpDefense">
-					<span>{{key}}</span>
-					<div><div style="width:{{(value>=180?100: value*100/180)}}%;background-color:{{ (value >= 100 ? 'green' : (value>=50 ? 'yellow' : 'red')) }}">{{value}}</div></div>
-				</div>
-			{% elseif key == "Speed" %}
-				<div style="grid-area:Speed">
-					<span>{{key}}</span>
-					<div><div style="width:{{(value>=180?100: value*100/180)}}%;background-color:{{ (value >= 100 ? 'green' : (value>=50 ? 'yellow' : 'red')) }}">{{value}}</div></div>
-				</div>
-			{% elseif key == "BST" %}
-				<div style="justify-self:flex-start;gap:20px">
-					<span>{{key}}</span>
-					<span>{{value}}</span>
-				</div>
-			{% endif %}
-		{% endfor %}
-		</div>
-		</div class="moves">
-		{% for move in pokemon[0].moves %}
-			{% for name,key in move %}
+			{% for key,value in pokemon[0].stats %}
+				{% if key == "HP" %}
+					<div style="grid-area:HP">
+						<span>{{key}}</span>
+						<div>
+							<div style="width:{{(value>=180?100: value*100/180)}}%;background-color:{{ (value >= 100 ? 'green' : (value>=50 ? 'yellow' : 'red')) }}">{{value}}</div>
+						</div>
+					</div>
+				{% elseif key == "Attack" %}
+					<div style="grid-area:Attack">
+						<span>{{key}}</span>
+						<div>
+							<div style="width:{{(value>=180?100: value*100/180)}}%;background-color:{{ (value >= 100 ? 'green' : (value>=50 ? 'yellow' : 'red')) }}">{{value}}</div>
+						</div>
+					</div>
+				{% elseif key == "Defense" %}
+					<div style="grid-area:Defense">
+						<span>{{key}}</span>
+						<div>
+							<div style="width:{{(value>=180?100: value*100/180)}}%;background-color:{{ (value >= 100 ? 'green' : (value>=50 ? 'yellow' : 'red')) }}">{{value}}</div>
+						</div>
+					</div>
+				{% elseif key == "Special Attack" %}
+					<div style="grid-area:SpAttack">
+						<span>{{key}}</span>
+						<div>
+							<div style="width:{{(value>=180?100: value*100/180)}}%;background-color:{{ (value >= 100 ? 'green' : (value>=50 ? 'yellow' : 'red')) }}">{{value}}</div>
+						</div>
+					</div>
+				{% elseif key == "Special Defense" %}
+					<div style="grid-area:SpDefense">
+						<span>{{key}}</span>
+						<div>
+							<div style="width:{{(value>=180?100: value*100/180)}}%;background-color:{{ (value >= 100 ? 'green' : (value>=50 ? 'yellow' : 'red')) }}">{{value}}</div>
+						</div>
+					</div>
+				{% elseif key == "Speed" %}
+					<div style="grid-area:Speed">
+						<span>{{key}}</span>
+						<div>
+							<div style="width:{{(value>=180?100: value*100/180)}}%;background-color:{{ (value >= 100 ? 'green' : (value>=50 ? 'yellow' : 'red')) }}">{{value}}</div>
+						</div>
+					</div>
+				{% elseif key == "BST" %}
+					<div style="justify-self:flex-start;gap:20px">
+						<span>{{key}}</span>
+						<span>{{value}}</span>
+					</div>
+				{% endif %}
 			{% endfor %}
-		{% endfor %}
 		</div>
-	{% endblock %}
+	</divclass="moves">
+	{% for move in pokemon[0].moves %}
+		{% for name,key in move %}{% endfor %}
+	{% endfor %}
+</div>{% endblock %}

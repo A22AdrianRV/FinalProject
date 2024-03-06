@@ -43,6 +43,28 @@ class PokedexRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
        }
+
+       public function getByType($arr):array{
+
+        if($arr["Type2"]==null){
+            return $this->createQueryBuilder('p')
+            ->andWhere('p.types LIKE :val')
+            ->setParameter("val",'%'.$arr["Type1"] . '%')
+            ->setMaxResults(50)
+            ->getQuery()
+            ->getResult();
+        }else{
+            return $this->createQueryBuilder('p')
+            ->andWhere('p.types LIKE :val')
+            ->andWhere('p.types LIKE :val2')
+            ->setParameter("val",'%'.$arr["Type1"] . '%')
+            ->setParameter("val2",'%'.$arr["Type2"] . '%')
+            ->setMaxResults(50)
+            ->getQuery()
+            ->getResult();
+        }
+
+       }
     //    public function findOneBySomeField($value): ?Pokedex
     //    {
     //        return $this->createQueryBuilder('p')

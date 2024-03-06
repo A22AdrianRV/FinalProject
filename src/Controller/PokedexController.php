@@ -3,9 +3,11 @@ namespace App\Controller;
 use App\Entity\Pokedex;
 use App\Repository\PokedexRepository;
 use App\Twig\getPokemon;
-use Doctrine\DBAL\Types\TextType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +17,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
     class PokedexController extends AbstractController{
 
 
-        #[Route('/pokemon/add')]
+        // #[Route('/pokemon/add')]
         public function InsertPokemon(HttpClientInterface $http,EntityManagerInterface $entityManagerInterface):Response{
             
 
@@ -80,8 +82,8 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
     }
 
-    #[Route('/')]
-    public function pokedex(PokedexRepository $pokedexRepository,Request $request,$slug = null):Response{
+    #[Route('/',"app_pokedex")]
+    public function pokedex(PokedexRepository $pokedexRepository,Request $request):Response{
 
         $pokemon = [];
         for($x = 1;$x<=20;$x++){
@@ -89,17 +91,63 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
             array_push($pokemon,$poke);
         }
         $pokedex = new Pokedex();
+        $pokedex->setTypes(["Type1"=>"","Type2"=>""]);
         $form = $this->createFormBuilder($pokedex)
-        ->add("name")
-        ->add("save",SubmitType::class,["label"=>"Search"])
+        ->add("name",TextType::class,[
+            "required"=>false,
+        ])
+        ->add("getByName",SubmitType::class,["label"=>"Search"])
+        ->add("types",CollectionType::class,[
+            'entry_type'=>ChoiceType::class,
+            'entry_options'  => [
+                'choices'  => [
+                    "Select" => null,
+                    "Normal" => "normal",
+                    "Fighting" => "fighting",
+                    "Flying" => "flying",
+                    "Poison" => "poison",
+                    "ground" => "ground",
+                    "Rock" => "rock",
+                    "Bug" => "bug",
+                    "Ghost" => "ghost",
+                    "Steel" => "steel",
+                    "Fire" => "fire",
+                    "Water" => "water",
+                    "Grass" => "grass",
+                    "Electric" => "electric",
+                    "Psychic" => "psychic",
+                    "Ice" => "ice",
+                    "Dragon" => "dragon",
+                    "Dark" => "dark",
+                    "Fairy" => "fairy",
+
+                ],
+            ],
+        ])
+        ->add("getByType",SubmitType::class,["label"=>"Filter"])
         ->getForm();
+
 
         $form->handleRequest($request);
 
+
         if($form->isSubmitted() && $form->isValid()){
             $pokemon = [];
-            array_push($pokemon,$pokedexRepository->getPokemon($form->getData()->getName()));
+            if (count($form->getData()->getTypes()) > 0 ){
+                foreach($pokedexRepository->getByType($form->getData()->getTypes()) as $info ){
+                    $poke = [$info];
+                    array_push($pokemon,$poke);
+                }
+            }else{
+                foreach($pokedexRepository->getPokemon($form->getData()->getName()) as $info ){
+                    $poke = [$info];
+                    array_push($pokemon,$poke);
+                }
+            }
+        
         }
+
+
         return $this->render('pokemon/pokedex.html.twig',[
             "pokemons" => $pokemon,
             "url" => "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/",
@@ -111,8 +159,47 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
     public function getInfo(PokedexRepository $pokedexRepository,Request $request,$slug):Response{
         $pokemon = $pokedexRepository->findById($slug);
 
+        $pokedex = new Pokedex();
+        $form = $this->createFormBuilder($pokedex)
+        ->add("name")
+        ->add("getByName",SubmitType::class,["label"=>"Search"])
+        ->add("types",CollectionType::class,[
+            'entry_type'=>ChoiceType::class,
+            'entry_options'  => [
+                'choices'  => [
+                    "Select" => null,
+                    "Normal" => "normal",
+                    "Fighting" => "fighting",
+                    "Flying" => "flying",
+                    "Poison" => "poison",
+                    "ground" => "ground",
+                    "Rock" => "rock",
+                    "Bug" => "bug",
+                    "Ghost" => "ghost",
+                    "Steel" => "steel",
+                    "Fire" => "fire",
+                    "Water" => "water",
+                    "Grass" => "grass",
+                    "Electric" => "electric",
+                    "Psychic" => "psychic",
+                    "Ice" => "ice",
+                    "Dragon" => "dragon",
+                    "Dark" => "dark",
+                    "Fairy" => "fairy",
+
+                ],
+            ],
+        ])
+        ->add("getByType",SubmitType::class,["label"=>"Filter"])
+        ->setAction($this->generateUrl("app_pokedex"))
+        ->getForm();
+
+        $form->handleRequest($request);
+
+
         return $this->render('pokemon/getInfo.html.twig',[
             "pokemon" => $pokemon,
+            "form" => $form
         ]);
     }
     

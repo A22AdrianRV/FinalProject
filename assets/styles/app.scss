@@ -42,7 +42,7 @@ nav {
   justify-content: space-between;
   padding: 10px;
   top: 0px;
-  height: 5vh;
+  height: 10vh;
 
   & a {
     text-decoration: none;
@@ -55,6 +55,7 @@ nav {
   flex-direction: column;
   text-align: center;
   align-items: center;
+  border-left: 1px solid black;
 
   & img {
     width: 300px;
@@ -72,6 +73,7 @@ nav {
     display: flex;
     flex-direction: row;
     gap: 10px;
+    margin: 5px;
 
     & p {
       padding: 5px;
@@ -114,7 +116,7 @@ nav {
 
   & .evo {
     & a {
-      border: 2px solid white;
+      // border: 2px solid white;
       border-radius: 10px;
       text-decoration: none;
       & p {
@@ -126,5 +128,31 @@ nav {
       }
     }
     padding: 10px;
+  }
+}
+
+
+#form{
+
+  & div{
+  padding: 5px;
+  margin: 5px;
+  }
+}
+
+.search {
+  min-height: 100%;
+  height: 100%;
+  width: 40vw;
+  float: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-top: 100px;
+
+  & #form{
+    background-color: white;
+    border-radius: 20px;
+    width:300px
   }
 }

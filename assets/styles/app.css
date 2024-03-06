@@ -1,17 +1,10 @@
 body {
   background-color: lightgray;
   margin: 0px;
-  height: 93.5vh;
+  height: 90vh;
 }
 
-.search {
-  min-height: 100%;
-  width: 30vw;
-  float: left;
-  border-right: 1px solid black;
-  display: flex;
-  align-items: center;
-}
+
 
 form {
   display: flex;
@@ -20,9 +13,9 @@ form {
   margin: 0 auto;
 }
 #app {
-  height: 30vh;
-  width: 65vw;
-  min-height: 30vh;
+  width: 58.9vw;
+  /* min-height: 40vh; */
+  border-left: 1px solid black;
   float: right;
   display: flex;
   flex-direction: row;
@@ -32,14 +25,14 @@ form {
 
 .card {
   text-align: center;
-  width: 10rem;
-  height: 12rem;
+  width: 12rem;
+  height: 13rem;
   padding: 10px;
   margin: 10px;
   border-radius: 10px;
 }
 
-.card > img {
+.card  img {
   max-height: 8rem;
   max-width: 9, 83rem;
   min-height: 6rem;
