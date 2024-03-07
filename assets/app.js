@@ -22,3 +22,5 @@ select.parentElement.addEventListener("input", (e) => {
     select2.options.selectedIndex = 0;
   }
 });
+
+

@@ -157,7 +157,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
         ]);
     }
 
-    #[Route('/{slug}')]
+    #[Route('/{slug}',"app_getInfo")]
     public function getInfo(PokedexRepository $pokedexRepository,Request $request,$slug):Response{
         $pokemon = $pokedexRepository->findById($slug);
 
@@ -208,10 +208,10 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
             "form" => $form
         ]);
     }
-    
 
-    #[Route('/pokemon/teams')]
-    public function teams(PokedexRepository $pokedexRepository,Request $request):Response{
+
+    #[Route('/pokemon/teams/{slug}',"app_teams")]
+    public function teams(PokedexRepository $pokedexRepository,TeamRepository $teamRepository,Request $request,EntityManagerInterface $entityManagerInterface,$slug = null):Response{
         
         $pokedex = new Pokedex();
         $form = $this->createFormBuilder($pokedex)
@@ -220,22 +220,27 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
         ])
         ->add("getPokemon",SubmitType::class,["label"=>"Search"])
         ->getForm();
-
         $form->handleRequest($request);
 
-        $pokemon = ($form->isSubmitted() ) ? $pokedexRepository->getPokemon($form->getData()->getName()) : null;
         
+        if($slug == null || preg_match("/\d/",$slug)){
+            $pokemon = ($form->isSubmitted()) ? $pokedexRepository->getPokemon($form->getData()->getName()) : null;
+            if($pokemon != null){
+                return $this->redirect("/pokemon/teams/" . $pokemon[0]->getName());
+            }
+        }elseif(preg_match("/\D/",$slug)){
+            $pokemon = $pokedexRepository->getPokemon($slug);
+        }
+        if(!preg_match("/\d/",$slug)){
         $team = new Team();
         $team->setMoves(["move1"=>"","move2"=>"","move3"=>"","move4"=>""]);
         $Moves = $pokemon!= null ? $pokemon[0]->getMoves() : null;
         $MoveChoices = ["Select a Move"=>""];
         if ($pokemon != null){
         foreach($Moves as $Move){
-            $MoveChoices[ucfirst(str_replace("-"," ",key($Move)))] = "";
+            $MoveChoices[ucfirst(str_replace("-"," ",key($Move)))] = key($Move);
         }
     }
-
-
 
         $Abilities = $pokemon!= null ? $pokemon[0]->getAbilities() : null;
         $AbilityChoice = [];
@@ -245,6 +250,25 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
         }
     }
         $team->setStats(["Hp"=>0,"Attack"=>0,"Defense"=>0,"Special_Attack"=>0,"Special_Defense"=>0,"Speed"=>0]);
+
+        }else{
+            $team = $teamRepository->findById($slug)[0];
+            $Moves = $team->getPokemonName()->getMoves();
+            $MoveChoices = ["Select a Move"=>""];
+            $pokemon = [$team->getPokemonName()];
+            foreach($Moves as $Move){
+            $MoveChoices[ucfirst(str_replace("-"," ",key($Move)))] = key($Move);
+            }
+        
+
+        $Abilities = $team->getPokemonName()->getAbilities();
+        $AbilityChoice = [];
+
+        foreach($Abilities as $Ability){
+            $AbilityChoice[ucfirst($Ability["name"])] = $Ability["name"];
+    }
+        }        
+
         $teamForm = $this->createFormBuilder($team)
         ->add("moves",CollectionType::class,[
             'entry_type'=>ChoiceType::class,
@@ -299,21 +323,24 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
         $teamForm->handleRequest($request);
 
         if($teamForm->isSubmitted() && $teamForm->get("addPokemon")->isClicked()){
-            dd($teamForm->getData());
             $Team = new Team();
             $Team->setAbility($teamForm->getData()->getAbility());
             $Team->setMoves($teamForm->getData()->getMoves());
             $Team->setNature($teamForm->getData()->getNature());
             $Team->setStats($teamForm->getData()->getStats());
-            $Team->setPokemonName($pokemon);
-            dd($Team);
+            $Team->setPokemonName($pokemon[0]);
+            $entityManagerInterface->persist($Team);
+            $entityManagerInterface->flush();
         }
 
+        $teams = $teamRepository->findAll();
         return $this->render('pokemon/teams.html.twig',[
             "pokemon" => $pokemon,
             "form" => $form,
             "TeamForm" => $teamForm,
-            "Moves" => $Moves
+            "Moves" => $Moves,
+            "slug" => $slug,
+            "teams" => $teams
         ]);
     }
 

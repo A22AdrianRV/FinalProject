@@ -116,7 +116,6 @@ nav {
 
   & .evo {
     & a {
-      // border: 2px solid white;
       border-radius: 10px;
       text-decoration: none;
       & p {
@@ -182,13 +181,13 @@ nav {
   & #renderForm {
     width: 70%;
     & form {
-      width: 70%;
+      width: 100%;
       & fieldset:first-of-type {
         display: flex;
         flex-direction: column;
         width: 50%;
         & #form_moves {
-          width: 100%;
+          width: 70%;
           align-self: center;
           justify-self: center;
           display: flex;
@@ -201,10 +200,15 @@ nav {
         flex-direction: column;
         width: 50%;
         & #form_stats {
+          // width: 100%;
+          flex-direction: row;
           align-self: center;
           justify-self: center;
           display: flex;
           flex-wrap: wrap;
+          & div{
+            width: 40%;
+          }
         }
       }
     }
@@ -214,6 +218,7 @@ nav {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+    width: 100%;
 
     & > div:last-of-type {
       display: flex;
