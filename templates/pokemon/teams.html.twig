@@ -1,1 +1,23 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
+{% endblock %}
+{% block body %}
+    <div class="team">
+    {% for i in 1..6 %}
+        <div style="background-color:black;width:100px;height:100px"></div>
+    {% endfor %}
+    </div>
+    <div class="currPokemon">
+        <img src="{{pokemon != null ? "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/" ~ pokemon[0].id ~ ".png" : null}}">
+        <div id="renderForm">
+            {{form(TeamForm)}}
+        <div>
+
+        </div>
+        </div>
+    </div>
+    <div class="PokemonForm">
+        {{form(form)}}
+    </div>
+{% endblock %}

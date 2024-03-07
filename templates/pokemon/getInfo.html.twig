@@ -15,6 +15,11 @@
 					<p class="{{type}}" style="font-size:2em">{{type}}</p>
 				{% endfor %}
 			</div>
+			<div class="abilities">
+				{% for ability in pokemon[0].abilities %}
+					<span style="font-size:2rem;">{{ability.name}}{{ability.is_hidden ? "(Hidden)":""}}</span>
+				{% endfor %}
+			</div>
 			<div class="evo">
 				{% set arrow %}
 				<div style="align-self:center">

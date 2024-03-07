@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\PokedexRepository;
 use ArrayAccess;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -34,6 +36,14 @@ class Pokedex
 
     #[ORM\Column]
     private array $evolution_chain = [];
+
+    #[ORM\OneToMany(targetEntity: Team::class, mappedBy: 'PokemonNameç')]
+    private Collection $TeamName;
+
+    public function __construct()
+    {
+        $this->TeamName = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -110,6 +120,36 @@ class Pokedex
     public function setEvolutionChain(array $evolution_chain): static
     {
         $this->evolution_chain = $evolution_chain;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Team>
+     */
+    public function getTeamName(): Collection
+    {
+        return $this->TeamName;
+    }
+
+    public function addTeamName(Team $teamName): static
+    {
+        if (!$this->TeamName->contains($teamName)) {
+            $this->TeamName->add($teamName);
+            $teamName->setPokemonNameç($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeamName(Team $teamName): static
+    {
+        if ($this->TeamName->removeElement($teamName)) {
+            // set the owning side to null (unless already changed)
+            if ($teamName->getPokemonNameç() === $this) {
+                $teamName->setPokemonNameç(null);
+            }
+        }
 
         return $this;
     }

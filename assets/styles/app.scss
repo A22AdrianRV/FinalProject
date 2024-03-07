@@ -131,12 +131,10 @@ nav {
   }
 }
 
-
-#form{
-
-  & div{
-  padding: 5px;
-  margin: 5px;
+#form {
+  & div {
+    padding: 5px;
+    margin: 5px;
   }
 }
 
@@ -150,9 +148,82 @@ nav {
   justify-content: flex-start;
   margin-top: 100px;
 
-  & #form{
+  & #form {
     background-color: white;
     border-radius: 20px;
-    width:300px
+    width: 300px;
+  }
+}
+
+.team {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: space-around;
+  width: 60%;
+  margin: 0 auto;
+  padding: 40px;
+}
+
+.form {
+  display: flex;
+  & #form {
+    justify-self: flex-start;
+  }
+}
+
+.currPokemon {
+  display: flex;
+  flex-direction: row;
+  & img {
+    height: 70%;
+  }
+
+  & #renderForm {
+    width: 70%;
+    & form {
+      width: 70%;
+      & fieldset:first-of-type {
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        & #form_moves {
+          width: 100%;
+          align-self: center;
+          justify-self: center;
+          display: flex;
+          flex-wrap: wrap;
+        }
+      }
+
+      & fieldset:nth-of-type(2) {
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        & #form_stats {
+          align-self: center;
+          justify-self: center;
+          display: flex;
+          flex-wrap: wrap;
+        }
+      }
+    }
+  }
+
+  & #form {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+
+    & > div:last-of-type {
+      display: flex;
+      align-items: flex-end;
+    }
+  }
+}
+
+.PokemonForm {
+  & form {
+    margin: auto 120px;
   }
 }

@@ -8,28 +8,17 @@
 // any CSS you import will output into a single css file (app.css in this case)
 import "./styles/app.css";
 
-import Vue from "vue";
+let select = document.getElementById("form_types_Type1");
+let select2 = document.getElementById("form_types_Type2");
+select.options.selectedIndex = 0;
+select2.options.selectedIndex = 0;
+select2.parentElement.style.display = "none";
 
-/*
-new Vue({
-  el: "#app",
-  data() {
-    return {
-      pokemonUrl:
-        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/",
-    };
-  },
-  methods: {
-    getInfo(index) {
-      window.location.replace(`/${index}`);
-    },
-    getUrl(index) {
-      if (this.togglePokemon) {
-        this.pokemonUrl += `${index}.png`;
-      }
-    },
-  },
-  delimiters: ["${", "}$"],
+select.parentElement.addEventListener("input", (e) => {
+  if (e.target.options.selectedIndex != 0) {
+    select2.parentElement.style.display = "";
+  } else {
+    select2.parentElement.style.display = "none";
+    select2.options.selectedIndex = 0;
+  }
 });
-
-*/
