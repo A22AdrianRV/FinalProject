@@ -21,6 +21,11 @@ $colors: (
 
 @import "../../node_modules/bootstrap/scss/bootstrap.scss";
 
+/* 
+* creates a gradient depending on the types of the pokemon, this is then applied by
+* giving pokemons classes that match their types, it creates every combination of classe
+* it also creates plain colors for each type for pokemon which have a single type
+*/
 @each $name, $color in $colors {
   @each $name2, $color2 in $colors {
     @if $name!=$name2 {
@@ -206,7 +211,7 @@ nav {
           justify-self: center;
           display: flex;
           flex-wrap: wrap;
-          & div{
+          & div {
             width: 40%;
           }
         }

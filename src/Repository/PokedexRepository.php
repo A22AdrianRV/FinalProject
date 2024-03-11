@@ -35,6 +35,7 @@ class PokedexRepository extends ServiceEntityRepository
                ->getResult();
        }
 
+       // This is a simple query based on name 
        public function getPokemon($name):array{
             return $this->createQueryBuilder('p')
             ->andWhere('p.name LIKE :val')
@@ -44,6 +45,7 @@ class PokedexRepository extends ServiceEntityRepository
             ->getResult();
        }
 
+       // This function filters by typem it also checks whethere there are 2 types or just one 
        public function getByType($arr):array{
 
         if($arr["Type2"]==null){

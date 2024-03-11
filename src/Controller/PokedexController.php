@@ -20,6 +20,11 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
     class PokedexController extends AbstractController{
 
 
+
+        /*
+        *   function to add all the pokemons to the databasem it queries the public api pokeapi 
+        *   and constructs pokemon objects for each query which then are inserted into the database.
+        */ 
         // #[Route('/pokemon/add')]
         public function InsertPokemon(HttpClientInterface $http,EntityManagerInterface $entityManagerInterface):Response{
             
@@ -88,11 +93,15 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
     #[Route('/',"app_pokedex")]
     public function pokedex(PokedexRepository $pokedexRepository,Request $request):Response{
 
+
+        // On load the main page shows 20 random pokemon. 
         $pokemon = [];
         for($x = 1;$x<=20;$x++){
             $poke = $pokedexRepository->findById(rand(1,1025));
             array_push($pokemon,$poke);
         }
+
+        // This is the main form that allows filtering by name and types.
         $pokedex = new Pokedex();
         $pokedex->setTypes(["Type1"=>"","Type2"=>""]);
         $form = $this->createFormBuilder($pokedex)
@@ -133,6 +142,10 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
         $form->handleRequest($request);
 
+        /**
+        * When the form is submitted it calls the Repository methods getPokemon that searches by name
+        * and getByType which filters by type. 
+        */
 
         if($form->isSubmitted() && $form->isValid()){
             $pokemon = [];
@@ -161,6 +174,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
     public function getInfo(PokedexRepository $pokedexRepository,Request $request,$slug):Response{
         $pokemon = $pokedexRepository->findById($slug);
 
+        // Same form as before this one redirects to the other function with the setAction method. 
        $pokedex = new Pokedex();
         $pokedex->setTypes(["Type1"=>"","Type2"=>""]);
         $form = $this->createFormBuilder($pokedex)
@@ -212,7 +226,8 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
     #[Route('/pokemon/teams/{slug}',"app_teams")]
     public function teams(PokedexRepository $pokedexRepository,TeamRepository $teamRepository,Request $request,EntityManagerInterface $entityManagerInterface,$slug = null):Response{
-        
+
+        // First form that queries the database by name. 
         $pokedex = new Pokedex();
         $form = $this->createFormBuilder($pokedex)
         ->add("name",TextType::class,[
@@ -222,7 +237,11 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
         ->getForm();
         $form->handleRequest($request);
 
-        
+        /*
+        *   When the first form is submitted the pokemon is saved on the pages slug,
+        * this checks if the slug is set and whether it is a number or not, if it's a number
+        * it signals a pokemon from the team table, if it's a string its from the pokemon table. 
+        */
         if($slug == null || preg_match("/\d/",$slug)){
             $pokemon = ($form->isSubmitted()) ? $pokedexRepository->getPokemon($form->getData()->getName()) : null;
             if($pokemon != null){
@@ -269,6 +288,12 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
     }
         }        
 
+        /*
+         *  This creates the form to insert into the team table, It changes depending 
+         * on the check from beforem if the pokemon is new its empty 
+         * but if the pokemon exists on the team its information is displayed
+         * 
+        */ 
         $teamForm = $this->createFormBuilder($team)
         ->add("moves",CollectionType::class,[
             'entry_type'=>ChoiceType::class,
@@ -321,6 +346,8 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
         ->getForm();
 
         $teamForm->handleRequest($request);
+
+        // insert into the team table
 
         if($teamForm->isSubmitted() && $teamForm->get("addPokemon")->isClicked()){
             $Team = new Team();

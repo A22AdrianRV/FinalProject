@@ -20,10 +20,21 @@ class getPokemon extends AbstractExtension{
         ];
     }
 
+    /*
+    *   Receives a url and extracts the digit of the pokemon from the end of it
+    *
+    */
     public function getId(string $url):string{
         $id = explode("/",$url)[count(explode("/",$url))-2];
         return $id;
     }
+
+    /*
+    *
+    * Receives an id and a url and returns a different image based on the id,
+    * this is because from the 920 id onwards there are no gifs so they wouldnt show on the page
+    *
+    */ 
 
     public function getURL(int $id,string $url):string{
         return $id <= 920 ? $url."other/showdown/" . $id . ".gif": $url.$id.".png";
